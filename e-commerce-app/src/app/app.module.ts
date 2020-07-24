@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -30,12 +29,13 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatSidenavModule} from "@angular/material/sidenav";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {TokenInterceptorService} from "./services/auth/token-interceptor.service";
+import {ErrorInterceptorService} from "./services/auth/error-interceptor.service";
 
 @NgModule({
   declarations: [
     AppComponent,
-
     HomeComponent,
     LoginComponent,
     RegisterComponent,
@@ -71,7 +71,19 @@ import {HttpClientModule} from "@angular/common/http";
     HttpClientModule
 
   ],
-  providers: [],
+  providers: [
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass :TokenInterceptorService,
+      multi : true
+    },
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass :ErrorInterceptorService,
+      multi : true
+    },
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

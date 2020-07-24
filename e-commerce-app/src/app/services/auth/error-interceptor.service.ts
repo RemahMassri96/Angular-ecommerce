@@ -4,8 +4,6 @@ import {Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
-import {error} from "util";
-
 @Injectable({
   providedIn: 'root'
 })
