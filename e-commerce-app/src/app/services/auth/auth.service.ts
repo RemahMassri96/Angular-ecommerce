@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
-import {ErrorHandler} from "../../shared/error-handler";
-import {Observable} from "rxjs";
-import {User} from "../../models/user";
-import {Profile} from "../../models/profile";
-import {Cart} from "../../models/cart";
-import {CartItem} from "../../models/cart-item";
-import {UserData} from "../../models/user-data";
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {ErrorHandler} from '../../shared/error-handler';
+import {Observable} from 'rxjs';
+import {User} from '../../models/user';
+import {Profile} from '../../models/profile';
+import {Cart} from '../../models/cart';
+import {CartItem} from '../../models/cart-item';
+import {UserData} from '../../models/user-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http : HttpClient , private router :Router) { }
+  constructor(private http: HttpClient , private router: Router) { }
 
   private registerUrl = `http://localhost:4200/auth/register`;
   private loginUrl = `http://localhost:4200/auth/login`;
@@ -25,90 +25,90 @@ export class AuthService {
   private imageChangeUrl = `http://localhost:4200/profile/userProfile/changeProfileImage`;
   private newImageUrl = `http://localhost:4200/profile/userProfile/setProfileImage`;
   private contactUrl  = `http://localhost:4200/contacts/new-mail`;
-  private errorHandler : ErrorHandler = new ErrorHandler();
+  private errorHandler: ErrorHandler = new ErrorHandler();
 
-  public currentUser : User;
-  public profile : Profile;
-  public cart :Cart;
-  public cartItem : CartItem;
-  public userName : string;
+  public currentUser: User;
+  public profile: Profile;
+  public cart: Cart;
+  public cartItem: CartItem;
+  public userName: string;
 
-  register(data:any) : Observable<any>{
-    try{
-     return this.http.post<any>(this.registerUrl,data)
-    }catch (error) {
+  register(data: any): Observable<any> {
+    try {
+     return this.http.post<any>(this.registerUrl, data);
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
   }
 
-  pUserData(){
-    if(this.isLoggedIn()){
-      this.prepareUserData().subscribe((uData)=> {
+  pUserData() {
+    if (this.isLoggedIn()) {
+      this.prepareUserData().subscribe((uData) => {
           this.profile = uData.profile;
           this.userName = `${uData.profile.firstName} ${uData.profile.lastName}`;
           this.cart = uData.cart;
           this.cartItem = uData.cartItem;
         });
-      this.getCurrentUser().subscribe(resUser=>{
+      this.getCurrentUser().subscribe(resUser => {
         this.currentUser = resUser;
       });
     }
   }
 
-  login(data:any) : Observable<any>{
-    try{
-      return this.http.post<any>(this.loginUrl,data)
-    }catch (error) {
+  login(data: any): Observable<any> {
+    try {
+      return this.http.post<any>(this.loginUrl, data);
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
   }
 
-  userLogout(){
+  userLogout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
-  prepareUserData() : Observable<UserData>{
-    try{
+  prepareUserData(): Observable<UserData> {
+    try {
       return this.http.get<UserData>(this.userDataUrl);
-    }catch (error) {
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
   }
 
-  messageContact(messageForm : any) : Observable<void>{
-    try{
-      return this.http.post<void>(this.contactUrl ,messageForm );
-    }catch (error) {
+  messageContact(messageForm: any): Observable<void> {
+    try {
+      return this.http.post<void>(this.contactUrl , messageForm );
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
 
   }
 
-  getCurrentUser(){
-    try{
+  getCurrentUser() {
+    try {
       return this.http.get<any>(this.userUrl);
-    }catch (error) {
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
 
   }
 
-  getSystemUsers() :Observable<User[]>{
-    try{
+  getSystemUsers(): Observable<User[]> {
+    try {
       return this.http.get<User[]>(this.usersUrl);
-    }catch (error) {
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
   }
 
-  getToken(){
+  getToken() {
     return localStorage.getItem('token');
   }
 
@@ -116,10 +116,10 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  getUserProfile() : Observable<Profile>{
-    try{
+  getUserProfile(): Observable<Profile> {
+    try {
       return this.http.get<Profile>(this.profileUrl);
-    }catch (error) {
+    } catch (error) {
       this.errorHandler.handleError(error);
 
     }
